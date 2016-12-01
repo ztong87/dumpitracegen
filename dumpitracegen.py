@@ -2,7 +2,8 @@
 # DUMPI Trace Generator
 
 import argparse
-import traffic # traffic functions
+import traffic  # traffic functions
+import config   # codef for config file parsing
 
 # takes traffic information and puts it into output files
 def generate_dumpi(jobs, output, start_time = 100, mpi_init_dt = 1, mpi_dt = 1, mpi_finalize_dt = 1):
@@ -13,7 +14,7 @@ def generate_dumpi(jobs, output, start_time = 100, mpi_init_dt = 1, mpi_dt = 1, 
             init_dt = mpi_init_dt
             dt = mpi_dt
             final_dt = mpi_finalize_dt
-            '''
+
             # write ASCII data to file
             filename = output + '-' + str(rank)
             with open(filename + '.dumpi', "w") as dumpi:
@@ -56,28 +57,6 @@ def generate_dumpi(jobs, output, start_time = 100, mpi_init_dt = 1, mpi_dt = 1, 
                 # write mpi finalize
                 dumpi.write("MPI_Finalize entering at walltime {}, cputime {} seconds in thread 0.\n".format(start, final_dt)); start += final_dt
                 dumpi.write("MPI_Finalize returning at walltime {}, cputime {} seconds in thread 0.\n".format(start, final_dt));
-            '''
-
-# really simple parse
-def config_line_parser(line):
-    line = line.split()
-    return [[int(field) for field in line[:5]] + [line[5], int(line[6])]]
-
-# read in configuration file
-# formatted as lines of
-#    rank-start rank-end number-of-destinations msg-size iterations pattern count
-#
-# ex:
-#        0         255           3                1024       5       perm    1
-def config_parser(filename):
-    with open(filename, 'r') as config:
-        jobs = []
-        for line in config.readlines():
-            parsed = config_line_parser(line)
-            if len(parsed):
-                jobs += parsed
-        return jobs if len(jobs) else None
-    return None
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Generate Dumpi Traces with parameters')
@@ -89,7 +68,7 @@ if __name__=='__main__':
     parser.add_argument('-final_dt', type=float, default=1,   help='time to run finalize functions')
     args = parser.parse_args()
 
-    jobs = read_config_file(args.config)
+    jobs = config.parse(args.config)
     if jobs:
         generate_dumpi(traffic.generate_traffic(jobs), args.output, args.start, args.init_dt, args.dt, args.final_dt)
     else:
