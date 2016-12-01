@@ -1,0 +1,16 @@
+DUMPI Trace Generator
+
+Generates synthetic traffic given some parameters and writes dumpi
+files to reflect the traffic.
+
+Usage:
+     dumpitracegen.py config output
+
+     Configuration files have lines of job descriptions
+        rank-start rank-end number-of-destinations msg-size iterations pattern count
+             0         255           3                1024       5       perm    1
+
+        Job ids are assigned sequentially.
+        All jobs start at the same time.
+
+     Output files are ASCII DUMPI traces that can be converted to binary files through ascii2dumpi
