@@ -14,3 +14,17 @@ Usage:
         All jobs start at the same time.
 
      Output files are ASCII DUMPI traces that can be converted to binary files through ascii2dumpi
+
+Adding new traffic patterns:
+    Add the traffic pattern .py file into the traffic directory
+    Add the traffic pattern function into the dictionary inside __init__.py
+
+    Each traffic pattern function:
+        Input:
+            start      = first rank
+            end        = last rank
+            n          = times to run generator before pulling output
+            iterations = number of communications from each rank
+
+        Output
+            {job id : {source rank: [destination ranks]}
