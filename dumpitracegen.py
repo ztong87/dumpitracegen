@@ -22,16 +22,28 @@ def receives(ranks):
 # takes traffic information and puts it into output files
 def generate_dumpi(jobs, prefix, startwall = 100, init_dt = 1, dt = 1, finalize_dt = 1, verbose = False):
     if verbose:
-        print "Generating Traffic"
+        print 'Generating Traffic'
+
     job_traffic = simpleconfig.generate_traffic(jobs)
 
     if verbose:
-        print "Traffic Generate Completed. Writing to files ..."
+        print 'Traffic Generate Completed. Writing to files ...'
 
     # get total number of ranks
     world_size = 0
     for _, ranks in job_traffic.iteritems():
         world_size += len(ranks)
+
+    # write meta file
+    with open(prefix + '.meta', 'w') as meta:
+        meta.write('hostname=\n')
+        meta.write('numprocs={}\n'.format(world_size))
+        meta.write('username=\n')
+        meta.write('startime={}\n'.format(int(startwall)))
+        meta.write('fileprefix={}\n'.format(prefix))
+        meta.write('version=1\n')
+        meta.write('subversion=1\n')
+        meta.write('subsubversion=0\n')
 
     # generate the communications for each job
     file_count = 0
@@ -39,7 +51,7 @@ def generate_dumpi(jobs, prefix, startwall = 100, init_dt = 1, dt = 1, finalize_
         for rank, incoming in receives(ranks).iteritems():
             # write ASCII data to file
             filename = prefix + '-' + str(rank)
-            with open(filename + '.dumpi', "w") as dumpi:
+            with open(filename + '.dumpi', 'w') as dumpi:
                 line, startwall = asciimpi.MPI_Init(startwall, init_dt)
                 dumpi.write(line + '\n')
 
@@ -62,7 +74,7 @@ def generate_dumpi(jobs, prefix, startwall = 100, init_dt = 1, dt = 1, finalize_
 
             file_count += 1
             if verbose:
-                print "Wrote " + filename + '.dumpi ({:3.2f}%)'.format(100. * file_count / world_size)
+                print 'Wrote ' + filename + '.dumpi ({:3.2f}%)'.format(100. * file_count / world_size)
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Generate Dumpi Traces with parameters')
