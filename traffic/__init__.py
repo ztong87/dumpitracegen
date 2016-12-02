@@ -25,13 +25,3 @@ patterns = {
     'rand'        : rand.rand,
     'random'      : rand.rand,
 }
-
-# returns {job id : {rank : [dst]}}
-def generate_traffic(config):
-    jobs = {}
-    job_counter = 0
-    for start, end, num_dst, size, iterations, pattern, count in config:
-        # does not check for rank overlap
-        jobs[job_counter] = patterns[pattern](start, end, count, iterations)
-        job_counter += 1
-    return jobs

@@ -1,7 +1,7 @@
 import random
 
 # generate n rounds before returning a random destination
-def rand(start, end, n, iterations):
+def rand(start, end, n, num_dst, iterations):
     # helper function
     def rng(start, end, src, n):
         for _ in xrange(n):
@@ -17,5 +17,8 @@ def rand(start, end, n, iterations):
 
     traffic = {}
     for src in xrange(start, end + 1):
-        traffic[src] = [rng(start, end, src, n) for _ in xrange(iterations)]
+        traffic[src] = []
+        for _ in xrange(iterations):
+            for _ in xrange(num_dst):
+                traffic[src] += [rng(start, end, src, n)]
     return traffic

@@ -3,6 +3,9 @@ DUMPI Trace Generator
 Generates synthetic traffic given some parameters and writes dumpi
 files to reflect the traffic.
 
+Prerequisites:
+    Python 2 (2.7 or greater)
+
 Usage:
      dumpitracegen.py config output
 
@@ -23,7 +26,8 @@ Adding new traffic patterns:
         Input:
             start      = first rank
             end        = last rank
-            n          = times to run generator before pulling output
+            n          = times to run generator before getting output
+            num_dst    = number of communications per iteration
             iterations = number of communications from each rank
 
         Output
