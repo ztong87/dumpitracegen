@@ -1,9 +1,9 @@
 import traffic
 
 # Takes in a formatted line of the format
-# rank-start rank-end number-of-destinations msg-size iterations pattern count
+# rank-start rank-end number-of-destinations msg-size (bytes) iterations pattern count
 # ex:
-#    0         255           3                1024       5       perm    1
+#    0         255           3                   1024              5      rand     1
 
 # and returns of dictionary of these values: {field : value}
 def parse_line(line):

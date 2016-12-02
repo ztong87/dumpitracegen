@@ -10,8 +10,8 @@ Usage:
      dumpitracegen.py config output
 
      Configuration files have lines of job descriptions
-        rank-start rank-end number-of-destinations msg-size iterations pattern count
-             0         255           3                1024       5       perm    1
+		rank-start rank-end number-of-destinations msg-size (bytes) iterations pattern count
+			0         255           3                   1024              5      rand    1
 
         Job ids are assigned sequentially.
         All jobs start at the same time.
@@ -24,8 +24,8 @@ Adding new traffic patterns:
 
     Each traffic pattern function:
         Input:
-            start      = first rank
-            end        = last rank
+            start      = first rank of the job
+            end        = last rank of the job
             n          = times to run generator before getting output
             num_dst    = number of communications per iteration
             iterations = number of communications from each rank
