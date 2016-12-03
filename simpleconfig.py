@@ -1,9 +1,9 @@
 import traffic
 
 # Takes in a formatted line of the format
-# rank-start rank-end number-of-destinations msg-size (bytes) iterations pattern count
+# rank-start rank-end number-of-destinations msg-count msg-type  iterations pattern skips
 # ex:
-#    0         255           3                   1024              5      rand     1
+#     0         255           3                1024    MPI_CHAR       5      rand    1
 
 # and returns of dictionary of these values: {field : value}
 def parse_line(line):
@@ -12,10 +12,11 @@ def parse_line(line):
             'start'       : int(line[0]),
             'end'         : int(line[1]),
             'num_dst'     : int(line[2]),
-            'size'        : int(line[3]),
-            'iterations'  : int(line[4]),
-            'pattern'     :     line[5],
-            'count'       : int(line[6]),
+            'count'       : int(line[3]),
+            'type'        :     line[4],
+            'iterations'  : int(line[5]),
+            'pattern'     :     line[6],
+            'skips'       : int(line[7]),
            }
 
 # Takes in a string, opens it, and returns a
@@ -40,7 +41,7 @@ def generate_traffic(config):
     for index, values in config.iteritems():
         jobs[index] = traffic.patterns[values['pattern']](values['start'],
                                                           values['end'],
-                                                          values['count'],
+                                                          values['skips'],
                                                           values['num_dst'],
                                                           values['iterations'])
     return jobs
