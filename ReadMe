@@ -8,31 +8,35 @@ Prerequisites:
     Python 2 (2.7 or greater)
 
 Usage:
-    dumpitracegen.py config-file config-file-parser output-prefix
+    dumpitracegen.py config prefix [optional arguments]
+        config
+            Name of file containing
+                parser name (must be at first valid line)
+                followed by formatted lines of job descriptions
+            Format should be described in the config/<line parser name>.py comments
 
-    Default configuration file format has lines of job descriptions
-        rank-start rank-end number-of-destinations msg-count msg-type  iterations pattern pattern-specific
-        ex:
-            0         255           3                1024    MPI_CHAR       5      rand          1
+        parser
+            Must match format of config file lines
+            Available values can be found in config/__init__.py
 
-    Job ids are assigned sequentially.
-    Job ranks are contiguous.
-    All jobs start at the same time.
+        prefix
+            String placed in front of all output filenames
 
     Output files are ASCII DUMPI traces that can be converted to binary files through ascii2dumpi
+    Note: All jobs start at the same time.
 
-Adding new configuration file line formats:
-    Add the line parser .py file into the config directory
+Adding new configuration file line parsers:
+    Add the line parser .py file into the config directory.
         Input:
             A formatted line from the config file
 
         Output:
-            {field (str): value (any type)}
+            {field (any type; typically string): value (any type)}
 
-    Add the parser into the dictionary inside config/__init__.py
+    Add the parser into the dictionary inside config/__init__.py.
 
 Adding new traffic patterns:
-    Add the traffic pattern .py file into the traffic directory
+    Add the traffic pattern .py file into the traffic directory.
         Input:
             Job dictionary from parser
 
@@ -46,4 +50,4 @@ Adding new traffic patterns:
 
     Add the traffic pattern function into the dictionary inside traffic/__init__.py
 
-    Add the traffic pattern into the necessary parser(s)
+    Add the traffic pattern into the necessary parser(s).

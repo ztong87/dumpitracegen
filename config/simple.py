@@ -5,13 +5,14 @@
 # ex:
 #     0         255           3                1024    MPI_CHAR       5      rand          1
 #
-# and returns of dictionary of these values: {field : value}
+# and returns of dictionary of these values: {field : value}, or None if it got a comment/empty line
+#
+# Available values for traffic patterns can be found in traffic/__init__.py.
+# Job ranks are contiguous.
+#
+
 def parse(line):
     line = line.split()
-
-    # allow for empty lines and comment lines
-    if (len(line) == 0) or (line[0] == '#'):
-       return None
 
     # common fields
     out = {
@@ -24,13 +25,12 @@ def parse(line):
            'pattern'     :     line[6],
           }
 
+    # read in pattern specific fields
     if (out['pattern'] == 'rand') or (out['pattern'] == 'random'):
         out['skip'] = int(line[7])
     elif (out['pattern'] == 'perm') or (out['pattern'] == 'permutation'):
         out['skip'] = int(line[7])
     elif out['pattern'] == 'shift':
         out['shift'] = int(line[7])
-    else:
-        return None
     return out
 

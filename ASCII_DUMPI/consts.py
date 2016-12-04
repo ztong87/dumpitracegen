@@ -1,4 +1,5 @@
-# https://github.com/sstsimulator/sst-macro/blob/d360f1fcb8dbcee0b70a33e3c6498fc6a17333f8/sumi-mpi/sstmac_mpi_integers.h
+# Taken from https://github.com/sstsimulator/sst-macro/blob/d360f1fcb8dbcee0b70a33e3c6498fc6a17333f8/sumi-mpi/sstmac_mpi_integers.h
+# but somehow still incorrect
 
 num_datatype = {
     0 : 'MPI_NULL',
@@ -61,5 +62,5 @@ str_datatype = {val : key for key, val in num_datatype.iteritems()}
 
 # communicators
 num_communicator = {
-    2          : 'COMM_WORLD',
+    2          : 'MPI_COMM_WORLD',
 }

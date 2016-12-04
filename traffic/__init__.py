@@ -14,7 +14,7 @@ import perm
 import rand
 import shift
 
-# dictionary of traffic patterns to functions
+# traffic patterns that can be used in config files
 patterns = {
     'perm'        : perm.perm,
     'permutation' : perm.perm,
