@@ -1,8 +1,6 @@
 # https://github.com/sstsimulator/sst-dumpi/blob/1d1ef777668b2982efed862c4275cc1341225623/dumpi/common/constants.h
 
 num_datatype = {
-    0  : 'MPI_DATATYPE_ERROR',
-    1  : 'MPI_DATATYPE_NULL',
     2  : 'MPI_CHAR',
     3  : 'MPI_SIGNED_CHAR',
     4  : 'MPI_UNSIGNED_CHAR',
@@ -29,7 +27,6 @@ num_datatype = {
     25 : 'MPI_SHORT_INT',
     26 : 'MPI_2INT',
     27 : 'MPI_LONG_DOUBLE_INT',
-    28 : 'MPI_FIRST_USER_DATATYPE'
 }
 
 # inverse of num_datatypes
@@ -37,5 +34,6 @@ str_datatype = {val : key for key, val in num_datatype.iteritems()}
 
 # communicators
 num_communicator = {
-    2          : 'MPI_COMM_WORLD',
+    2 : 'MPI_COMM_WORLD',
+    3 : 'MPI_COMM_SELF',
 }
