@@ -1,35 +1,49 @@
 DUMPI Trace Generator
 
-Generates synthetic traffic given some parameters and writes dumpi
-files to reflect the traffic.
+Generates synthetic traffic given some parameters
+and writes ASCII DUMPI files to reflect the traffic.
+.meta file is also written.
 
 Prerequisites:
     Python 2 (2.7 or greater)
 
 Usage:
-     dumpitracegen.py config output
+    dumpitracegen.py config-file config-file-parser output-prefix
 
-     Configuration files have lines of job descriptions
-        rank-start rank-end number-of-destinations msg-count msg-type  iterations pattern skips
+    Default configuration file format has lines of job descriptions
+        rank-start rank-end number-of-destinations msg-count msg-type  iterations pattern pattern-specific
         ex:
-            0         255           3                1024    MPI_CHAR       5      rand    1
+            0         255           3                1024    MPI_CHAR       5      rand          1
 
-        Job ids are assigned sequentially.
-        All jobs start at the same time.
+    Job ids are assigned sequentially.
+    Job ranks are contiguous.
+    All jobs start at the same time.
 
-     Output files are ASCII DUMPI traces that can be converted to binary files through ascii2dumpi
+    Output files are ASCII DUMPI traces that can be converted to binary files through ascii2dumpi
+
+Adding new configuration file line formats:
+    Add the line parser .py file into the config directory
+        Input:
+            A formatted line from the config file
+
+        Output:
+            {field (str): value (any type)}
+
+    Add the parser into the dictionary inside config/__init__.py
 
 Adding new traffic patterns:
     Add the traffic pattern .py file into the traffic directory
-    Add the traffic pattern function into the dictionary inside __init__.py
-
-    Each traffic pattern function:
         Input:
-            start      = first rank of the job
-            end        = last rank of the job
-            n          = times to run generator before getting output
-            num_dst    = number of communications per iteration
-            iterations = number of communications from each rank
+            Job dictionary from parser
+
+            Minimum suggested fields:
+                start and end ranks
+                pattern name
+                number of elements and element type (for MPI functions)
 
         Output
-            {job id : {source rank: [destination ranks]}
+            {source rank (int): [destination ranks (int array)]}
+
+    Add the traffic pattern function into the dictionary inside traffic/__init__.py
+
+    Add the traffic pattern into the necessary parser(s)

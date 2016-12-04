@@ -2,13 +2,10 @@
 #
 # Traffic functions generate traffic for all ranks at the same time
 #   Input:
-#     start      = first rank
-#     end        = last rank
-#     n          = times to run generator before pulling output
-#     iterations = number of communications from each rank
+#       A dictionary (str -> value) with all necessary fields to generate traffic
 #
 #   Output
-#    {job id : {source rank: [destination ranks]}
+#       {source rank: [destination ranks]}
 #
 # ###################################################################
 

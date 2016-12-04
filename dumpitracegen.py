@@ -3,9 +3,9 @@
 
 import argparse
 
-import traffic      # traffic functions
-import simpleconfig # code for config file parsing
-import sstmac_mpi   # ASCII MPI DUMPI strings
+import ASCII_DUMPI # ASCII DUMPI MPI functions to strings
+import config      # handle configuration data
+import traffic     # traffic functions
 
 # Takes in the ranks of a job
 # returns {rank : [ranks talking to this rank]}
@@ -20,14 +20,8 @@ def receives(ranks):
     return comms
 
 # takes traffic information and puts it into output files
-def generate_dumpi(jobs, prefix, startwall = 100, init_dt = 1, dt = 1, finalize_dt = 1, verbose = False):
-    if verbose:
-        print 'Generating Traffic ...'
-
-    job_traffic = simpleconfig.generate_traffic(jobs)
-
-    if verbose:
-        print 'Traffic Generate Completed. Writing to files ...'
+def generate_dumpi(jobs, prefix, startwall, init_dt, dt, finalize_dt):
+    job_traffic = config.generate_traffic(jobs)
 
     # get total number of ranks
     world_size = 0
@@ -44,49 +38,42 @@ def generate_dumpi(jobs, prefix, startwall = 100, init_dt = 1, dt = 1, finalize_
         meta.write('version=1\n')
         meta.write('subversion=1\n')
         meta.write('subsubversion=0\n')
-    if verbose:
-        print prefix + '.meta written'
 
     # generate the communications for each job
-    file_count = 0
     for job_id, ranks in job_traffic.iteritems():
         for rank, incoming in receives(ranks).iteritems():
             # write ASCII data to file
             filename = prefix + '-' + str(rank)
             with open(filename + '.dumpi', 'w') as dumpi:
-                line, startwall = sstmac_mpi.MPI_Init(startwall, init_dt)
+                line, startwall = ASCII_DUMPI.MPI_Init(startwall, init_dt)
                 dumpi.write(line + '\n')
 
-                line, startwall = sstmac_mpi.MPI_Comm_rank(rank, 2, startwall, init_dt)
+                line, startwall = ASCII_DUMPI.MPI_Comm_rank(rank, 2, startwall, init_dt)
                 dumpi.write(line + '\n')
 
-                line, startwall = sstmac_mpi.MPI_Comm_size(2, world_size, startwall, init_dt)
+                line, startwall = ASCII_DUMPI.MPI_Comm_size(2, world_size, startwall, init_dt)
                 dumpi.write(line + '\n')
 
                 for send in ranks[rank]:
-                    line, startwall = sstmac_mpi.MPI_Send(startwall, dt, jobs[job_id]['count'], sstmac_mpi.str_datatype[jobs[job_id]['type']], send, 0, 2, startwall, dt, 0)
+                    line, startwall = ASCII_DUMPI.MPI_Send(startwall, dt, jobs[job_id]['count'], ASCII_DUMPI.str_datatype[jobs[job_id]['type']], send, 0, 2, startwall, dt, 0)
                     dumpi.write(line + '\n')
 
                 for recv in incoming:
-                    line, startwall = sstmac_mpi.MPI_Recv(startwall, dt, jobs[job_id]['count'], sstmac_mpi.str_datatype[jobs[job_id]['type']], recv, 0, 2, startwall, dt, 0)
+                    line, startwall = ASCII_DUMPI.MPI_Recv(startwall, dt, jobs[job_id]['count'], ASCII_DUMPI.str_datatype[jobs[job_id]['type']], recv, 0, 2, startwall, dt, 0)
                     dumpi.write(line + '\n')
 
-                line, _ = sstmac_mpi.MPI_Finalize(startwall, finalize_dt)
+                line, _ = ASCII_DUMPI.MPI_Finalize(startwall, finalize_dt)
                 dumpi.write(line + '\n')
-
-            file_count += 1
-            if verbose:
-                print 'Wrote ' + filename + '.dumpi ({:3.2f}%)'.format(100. * file_count / world_size)
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Generate Dumpi Traces with parameters')
     parser.add_argument('config',     type=str,                  help='file with list of job descriptions')
+    parser.add_argument('parser',     type=str,                  help='name of configuration parsing method')
     parser.add_argument('prefix',     type=str,                  help='output file name prefix')
-    parser.add_argument('-v',         action='store_true',       help='print progress message')
     parser.add_argument('--start',    type=float, default=100.0, help='starting walltime (default 100)')
     parser.add_argument('--init_dt',  type=float, default=1.0,   help='time to run init functions (default 1)')
     parser.add_argument('--dt',       type=float, default=1.0,   help='time to run functions (default 1)')
     parser.add_argument('--final_dt', type=float, default=1.0,   help='time to run finalize functions (default 1)')
     args = parser.parse_args()
 
-    generate_dumpi(simpleconfig.parse(args.config), args.prefix, args.start, args.init_dt, args.dt, args.final_dt, args.v)
+    generate_dumpi(config.parse(args.config, config.parsers[args.parser]), args.prefix, args.start, args.init_dt, args.dt, args.final_dt)
