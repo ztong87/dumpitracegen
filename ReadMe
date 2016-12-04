@@ -10,14 +10,7 @@ Prerequisites:
 Usage:
     dumpitracegen.py config prefix [optional arguments]
         config
-            Name of file containing
-                parser name (must be at first valid line)
-                followed by formatted lines of job descriptions
-            Format should be described in the config/<line parser name>.py comments
-
-        parser
-            Must match format of config file lines
-            Available values can be found in config/__init__.py
+            Name of file containing formatted lines of job descriptions
 
         prefix
             String placed in front of all output filenames
@@ -26,28 +19,22 @@ Usage:
     Note: All jobs start at the same time.
 
 Adding new configuration file line parsers:
-    Add the line parser .py file into the config directory.
-        Input:
-            A formatted line from the config file
-
-        Output:
-            {field (any type; typically string): value (any type)}
-
-    Add the parser into the dictionary inside config/__init__.py.
+    Modify the function config.parse_line
 
 Adding new traffic patterns:
     Add the traffic pattern .py file into the traffic directory.
         Input:
             Job dictionary from parser
 
-            Minimum suggested fields:
+            Fields that are already available:
                 start and end ranks
-                pattern name
-                number of elements and element type (for MPI functions)
+                how many elements to send
+                data type of elements
+                number of communications per iteration
+                number of iterations
+                traffic pattern
 
         Output
-            {source rank (int): [destination ranks (int array)]}
+            {source rank : [destination ranks]}
 
-    Add the traffic pattern function into the dictionary inside traffic/__init__.py
-
-    Add the traffic pattern into the necessary parser(s).
+    Add the traffic pattern into traffic/__init__.py
