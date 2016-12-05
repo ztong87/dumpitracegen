@@ -27,12 +27,12 @@ Adding new traffic patterns:
             Job dictionary from parser
 
             Fields that are already available:
-                start and end ranks
+                start rank
+                end rank
                 how many elements to send
                 data type of elements
-                number of communications per iteration
                 number of iterations
-                traffic pattern
+                traffic pattern name
 
         Output
             {source rank : [destination ranks]}

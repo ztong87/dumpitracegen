@@ -1,7 +1,0 @@
-# comments on separate lines are allowed, as well as empty lines
-
-0     255  1048576 MPI_CHAR 4  11  random 1
-256   500  12345   MPI_CHAR 30 100 shift  3
-501   802  32      MPI_CHAR 12 23  shift  5
-803   900  123     MPI_CHAR 9  3   perm   4
-901  1400  1024    MPI_CHAR 12 20  random 10
