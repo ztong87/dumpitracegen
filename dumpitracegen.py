@@ -76,10 +76,10 @@ def generate_dumpi(jobs, prefix, startwall, init_dt, dt, finalize_dt):
                 subprocess.call([args.a2d, filename, '-o', filename + '.bin'])
 
 if __name__=='__main__':
-    parser = argparse.ArgumentParser(description='Generate Synthetic Dumpi Traces')
-    parser.add_argument('config',     type=str,                  help='file with list of job descriptions')
+    parser = argparse.ArgumentParser(description='Synthetic DUMPI Trace Generator')
+    parser.add_argument('config',     type=str,                  help='name of file with list of job descriptions')
     parser.add_argument('prefix',     type=str,                  help='output filename prefix')
-    parser.add_argument('--a2d',      type=str,   default=None,  help='define to convert ASCII output to binary')
+    parser.add_argument('--a2d',      type=str,   default=None,  help='specify converter to convert ASCII output to binary')
     parser.add_argument('--start',    type=float, default=100.0, help='starting walltime (default 100.0 seconds since epoch)')
     parser.add_argument('--init_dt',  type=float, default=1.0,   help='time to run init functions (default 1.0 seconds)')
     parser.add_argument('--dt',       type=float, default=1.0,   help='time to run MPI functions (default 1.0 seconds)')

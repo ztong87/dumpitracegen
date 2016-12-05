@@ -1,4 +1,4 @@
-# Simple configuration line parser
+# Configuration Line Parser
 #
 # Takes in a formatted line of the format
 # rank-start rank-end msg-count msg-type  iterations pattern pattern-specific-values
