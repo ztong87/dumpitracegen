@@ -44,8 +44,7 @@ def generate_dumpi(jobs, prefix, startwall, init_dt, dt, finalize_dt):
         # generate the receives for the current job
         for rank, incoming in receives(ranks).iteritems():
             # write ASCII data to file
-            filename = prefix + '-' + str(rank)
-            with open(filename + '.dumpi', 'w') as dumpi:
+            with open(prefix + '-' + str(rank), 'w') as dumpi:
                 line, startwall = ASCII_DUMPI.MPI_Init(startwall, init_dt)
                 dumpi.write(line + '\n')
 
