@@ -71,7 +71,3 @@ def DNN(job):
               traffic[job['start'] + nid] += [job['start'] + dst_id]
 
     return traffic
-
-
-if __name__=='__main__':
-    print DNN({'start' : 1500, 'end' : 2000, 'iterations' : 1, 'dim' : 4})
