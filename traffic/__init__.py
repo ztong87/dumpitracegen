@@ -39,7 +39,7 @@ patterns = {
     '3DNN'                  : DNN.DNN,
     'DNN'                   : DNN.DNN,
     'pointtopoint_alltoall' : alltoall.pointtopoint_alltoall,
-    'MPI_alltoall'          : alltoall.MPI_alltoall,
+    'MPI_Alltoall'          : alltoall.MPI_Alltoall,
 }
 
 # any extra pattern specific data to extract
@@ -59,5 +59,5 @@ pattern_specific = {
     '3DNN'                  : lambda line : {'dim'   : 3,},
     'DNN'                   : lambda line : {'dim'   : int(line[6]),},
     'pointtopoint_alltoall' : lambda line : {},
-    'MPI_alltoall'          : lambda line : {},
+    'MPI_Alltoall'          : lambda line : {},
 }

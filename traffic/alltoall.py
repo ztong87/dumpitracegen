@@ -6,5 +6,6 @@
 def pointtopoint_alltoall(job):
     return {src : [(range(job['start'], src) + range(src + 1, job['end'] + 1))] * job['iterations'] for src in xrange(job['start'], job['end'] + 1)}
 
-def MPI_alltoall(job):
-    return {}
+# special case; do not call from traffic.patterns
+def MPI_Alltoall(job):
+    return {src : [] for src in xrange(job['start'], job['end'] + 1)}

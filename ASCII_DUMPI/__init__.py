@@ -54,3 +54,14 @@ def MPI_Recv(startwall, startcpu, count, type, src, tag, comm, endwall, endcpu, 
                         'MPI_Status status=<IGNORED>',
                         'MPI_Recv returning at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(endwall, endcpu, thread)
                     ]), endwall + endcpu
+
+def MPI_Alltoall(startwall, startcpu, count, type, tag, comm, endwall, endcpu, thread = 0):
+    return '\n'.join([
+                        'MPI_Alltoall entering at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(startwall, startcpu, thread),
+                        'int sendcount={}'.format(count),
+                        'MPI_Datatype sendtype={} ({})'.format(type, num_datatype[type]),
+                        'int recvcount={}'.format(count),
+                        'MPI_Datatype recvtype={} ({})'.format(type, num_datatype[type]),
+                        'MPI_Comm comm={} ({})'.format(comm, num_communicator[comm]),
+                        'MPI_Alltoall returning at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(endwall, endcpu, thread)
+                    ]), endwall + endcpu

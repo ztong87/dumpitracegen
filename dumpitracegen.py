@@ -49,29 +49,38 @@ def generate_dumpi(jobs, prefix, startwall, init_dt, dt, finalize_dt):
     for job in jobs:
         # generate the sends for the current job
         ranks = config.generate_traffic(job)
+        # generate the receives for the current job
+        for rank, incoming in receives(ranks).iteritems():
+            #########################################
+            # should probably check for rank > 9999 #
+            #########################################
 
-        # special case all to all traffic, calling MPI_Alltoall
-        if 'MPI_alltoall' == job['pattern']:
-            pass
-        else:
-            # generate the receives for the current job
-            for rank, incoming in receives(ranks).iteritems():
-                #########################################
-                # should probably check for rank > 9999 #
-                #########################################
+            # write ASCII data to file
+            filename = prefix + '-{:04d}'.format(rank)
+            with open(filename, 'w') as dumpi:
+                line, startwall = ASCII_DUMPI.MPI_Init(startwall, init_dt)
+                dumpi.write(line + '\n')
 
-                # write ASCII data to file
-                filename = prefix + '-{:04d}'.format(rank)
-                with open(filename, 'w') as dumpi:
-                    line, startwall = ASCII_DUMPI.MPI_Init(startwall, init_dt)
-                    dumpi.write(line + '\n')
+                line, startwall = ASCII_DUMPI.MPI_Comm_rank(rank, 2, startwall, init_dt)
+                dumpi.write(line + '\n')
 
-                    line, startwall = ASCII_DUMPI.MPI_Comm_rank(rank, 2, startwall, init_dt)
-                    dumpi.write(line + '\n')
+                line, startwall = ASCII_DUMPI.MPI_Comm_size(2, world_size, startwall, init_dt)
+                dumpi.write(line + '\n')
 
-                    line, startwall = ASCII_DUMPI.MPI_Comm_size(2, world_size, startwall, init_dt)
-                    dumpi.write(line + '\n')
-
+                # special case all to all traffic, calling MPI_Alltoall
+                if 'MPI_Alltoall' == job['pattern']:
+                    for it in xrange(job['iterations']):
+                        line, startwall = ASCII_DUMPI.MPI_Alltoall(startwall,                               # start wall time
+                                                                   dt,                                      # start cpu time
+                                                                   job['count'],                            # number of elements
+                                                                   ASCII_DUMPI.str_datatype[job['type']],   # type of element
+                                                                   it,                                      # tag
+                                                                   2,                                       # communicator
+                                                                   startwall + dt,                          # end wall time
+                                                                   dt,                                      # end cpu time
+                                                                   0)
+                        dumpi.write(line + '\n')
+                else:
                     # make iterations of sends and receives the same size
                     while len(ranks[rank]) < len(incoming):
                         ranks[rank] += [[]]
@@ -107,12 +116,12 @@ def generate_dumpi(jobs, prefix, startwall, init_dt, dt, finalize_dt):
                                                                    0)                                       # thread
                         dumpi.write(line + '\n')
 
-                    line, _ = ASCII_DUMPI.MPI_Finalize(startwall, finalize_dt)
-                    dumpi.write(line + '\n')
+                line, _ = ASCII_DUMPI.MPI_Finalize(startwall, finalize_dt)
+                dumpi.write(line + '\n')
 
-                # convert to binary
-                if args.a2d:
-                    subprocess.call([args.a2d, filename, '-o', filename + '.bin'])
+            # convert to binary
+            if args.a2d:
+                subprocess.call([args.a2d, filename, '-o', filename + '.bin'])
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Synthetic DUMPI Trace Generator')
