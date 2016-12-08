@@ -9,8 +9,7 @@ import copy
 import math
 import shift
 
-# copied from traceReader
-def DNN(job):
+def iteration(job):
     traffic = {rank : [] for rank in xrange(job['start'], job['end'] + 1)}
 
     # number of ranks
@@ -69,5 +68,10 @@ def DNN(job):
             if nid != dst_id:
               # add to set of traffic
               traffic[job['start'] + nid] += [job['start'] + dst_id]
-
     return traffic
+
+# copied from traceReader
+def DNN(job):
+    # generate only once, since always the same
+    traffic = iteration(job)
+    return {src : [traffic[src]] * job['iterations'] for src in xrange(job['start'], job['end'] + 1)}

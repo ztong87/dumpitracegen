@@ -6,16 +6,22 @@
 
 import random
 
+def iteration(job):
+    traffic = {src : [] for src in xrange(job['start'], job['end'] + 1)}
+
+    # shuffled list of ranks
+    pairs = range(job['start'], job['end'] + 1)
+    random.shuffle(pairs)
+
+    # wrap around
+    pairs += [pairs[0]]
+
+    # pairs[i] -> pairs[i + 1] for all i
+    return {pairs[i] : [pairs[i + 1]] for i in xrange(len(pairs) - 1)}
+
 def perm(job):
-    traffic = {rank : [] for rank in xrange(job['start'], job['end'] + 1)}
-
+    traffic = {src : [[]] for src in xrange(job['start'], job['end'] + 1)}
     for _ in xrange(job['iterations']):
-        # shuffled list of ranks
-        pairs = range(job['start'], job['end'] + 1)
-        random.shuffle(pairs)
-
-        # pairs[i] -> pairs[i + 1]
-        for i in xrange(0, len(pairs), 2):
-            traffic[pairs[i]] += [pairs[i + 1]]
-
+        for src, dst in iteration(job).iteritems():
+            traffic[src] += [dst]
     return traffic

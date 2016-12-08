@@ -3,18 +3,23 @@
 #     start      = first rank
 #     end        = last rank
 #     iterations = number of times to repeat
-#     count      = number of communications from each rank
+#     X          = number of communications from each rank
 
 import random
 
-def rand(job):
-    traffic = {}
+def iteration(job):
+    it = {src : [] for src in xrange(job['start'], job['end'] + 1)}
     for src in xrange(job['start'], job['end'] + 1):
-        traffic[src] = []
-        for _ in xrange(job['iterations']):
-            for _ in xrange(job['count']):
+        for _ in xrange(job['X']):
+            dst = random.randint(job['start'], job['end'])
+            while src == dst: # don't allow for src == dst, but allow for repeated dst
                 dst = random.randint(job['start'], job['end'])
-                while src == dst: # don't allow for src == dst, but allow for repeated dst
-                    dst = random.randint(job['start'], job['end'])
-                traffic[src] += [dst]
+            it[src] += [dst]
+    return it
+
+def rand(job):
+    traffic = {src : [] for src in xrange(job['start'], job['end'] + 1)}
+    for _ in xrange(job['iterations']):
+        for src, dsts in iteration(job).iteritems():
+            traffic[src] += [dsts]
     return traffic

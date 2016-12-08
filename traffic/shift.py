@@ -14,9 +14,12 @@ def right(src, shift, start, end):
 
 # the function called by parse_line
 def shift_right(job):
-    traffic = {}
+    traffic = {src : [] for src in xrange(job['start'], job['end'] + 1)}
     for src in xrange(job['start'], job['end'] + 1):
-        traffic[src] = [right(src, job['shift'], job['start'], job['end'])] * job['iterations']
+        dst = right(src, job['shift'], job['start'], job['end'])
+        # ignore src == dst
+        if src != dst:
+            traffic[src] = [[dst]] * job['iterations']
     return traffic
 
 # shift left with wrap around
@@ -28,7 +31,10 @@ def left(src, shift, start, end):
 
 # the function called by parse_line
 def shift_left(job):
-    traffic = {}
+    traffic = {src : [] for src in xrange(job['start'], job['end'] + 1)}
     for src in xrange(job['start'], job['end'] + 1):
-        traffic[src] = [left(src, job['shift'], job['start'], job['end'])] * job['iterations']
+        dst = left(src, job['shift'], job['start'], job['end'])
+        # ignore src == dst
+        if src != dst:
+            traffic[src] = [[dst]] * job['iterations']
     return traffic

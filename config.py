@@ -52,6 +52,6 @@ def parse(filename):
     return jobs
 
 # Generate traffic for one job
-# returns {rank : [dst]}
+# returns {rank : [[dst]]}
 def generate_traffic(job):
     return traffic.patterns[job['pattern']](job)

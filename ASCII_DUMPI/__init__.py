@@ -43,12 +43,12 @@ def MPI_Send(startwall, startcpu, count, type, dst, tag, comm, endwall, endcpu, 
                         'MPI_Send returning at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(endwall, endcpu, thread)
                      ]), endwall + endcpu
 
-def MPI_Recv(startwall, startcpu, count, type, dst, tag, comm, endwall, endcpu, thread = 0):
+def MPI_Recv(startwall, startcpu, count, type, src, tag, comm, endwall, endcpu, thread = 0):
     return '\n'.join([
                         'MPI_Recv entering at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(startwall, startcpu, thread),
                         'int count={}'.format(count),
                         'MPI_Datatype datatype={} ({})'.format(type, num_datatype[type]),
-                        'int source={}'.format(dst),
+                        'int source={}'.format(src),
                         'int tag={}'.format(tag),
                         'MPI_Comm comm={} ({})'.format(comm, num_communicator[comm]),
                         'MPI_Status status=<IGNORED>',
