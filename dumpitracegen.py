@@ -89,6 +89,21 @@ def generate_dumpi(jobs, prefix, startwall, init_dt, dt, finalize_dt):
 
                     # sends
                     for it in xrange(len(ranks[rank])):
+                        # recieves
+                        for src in incoming[it]:
+                            line, startwall = ASCII_DUMPI.MPI_Irecv(startwall,                              # start wall time
+                                                                   dt,                                      # start cpu time
+                                                                   job['count'],                            # number of elements
+                                                                   ASCII_DUMPI.str_datatype[job['type']],   # type of element
+                                                                   src,                                     # source rank
+                                                                   it,                                      # tag
+                                                                   2,                                       # communicator
+                                                                   startwall + dt,                          # end wall time
+                                                                   dt,                                      # end cpu time
+                                                                   0)                                       # thread
+                        dumpi.write(line + '\n')
+
+                        # Send
                         for dst in ranks[rank][it]:
                             line, startwall = ASCII_DUMPI.MPI_Send(startwall,                               # start wall time
                                                                    dt,                                      # start cpu time
@@ -100,21 +115,21 @@ def generate_dumpi(jobs, prefix, startwall, init_dt, dt, finalize_dt):
                                                                    startwall + dt,                          # end wall time
                                                                    dt,                                      # end cpu time
                                                                    0)                                       # thread
-                            dumpi.write(line + '\n')
-
-                        # recieves
-                        for src in incoming[it]:
-                            line, startwall = ASCII_DUMPI.MPI_Recv(startwall,                               # start wall time
+                            dumpi.write(line + '\n') 
+                        
+                        # Wait
+                        for dst in ranks[rank][it]:
+                            line, startwall = ASCII_DUMPI.MPI_Wait(startwall,                               # start wall time
                                                                    dt,                                      # start cpu time
                                                                    job['count'],                            # number of elements
                                                                    ASCII_DUMPI.str_datatype[job['type']],   # type of element
-                                                                   src,                                     # source rank
+                                                                   dst,                                     # destination rank
                                                                    it,                                      # tag
                                                                    2,                                       # communicator
                                                                    startwall + dt,                          # end wall time
                                                                    dt,                                      # end cpu time
                                                                    0)                                       # thread
-                        dumpi.write(line + '\n')
+                            dumpi.write(line + '\n') 
 
                 line, _ = ASCII_DUMPI.MPI_Finalize(startwall, finalize_dt)
                 dumpi.write(line + '\n')
@@ -135,3 +150,4 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     generate_dumpi(config.parse(args.config), args.prefix, args.start, args.init_dt, args.dt, args.final_dt)
+

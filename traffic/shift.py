@@ -9,7 +9,7 @@
 def right(src, shift, start, end):
     dst = src + (shift % (end - start + 1))
     if dst > end:
-        dst -= end - start
+        dst -= end - start + 1
     return dst
 
 # the function called by parse_line

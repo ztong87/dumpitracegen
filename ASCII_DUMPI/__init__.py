@@ -1,5 +1,7 @@
 from consts import *
 
+
+
 def MPI_Initialized(startwall, dt):
     out  = 'MPI_Initialized entering at walltime {:.9f}, cputime {:.9f} seconds in thread 0.\n'.format(startwall, dt); startwall += dt
     out += 'int result=0\n'.format()
@@ -43,16 +45,31 @@ def MPI_Send(startwall, startcpu, count, type, dst, tag, comm, endwall, endcpu, 
                         'MPI_Send returning at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(endwall, endcpu, thread)
                      ]), endwall + endcpu
 
-def MPI_Recv(startwall, startcpu, count, type, src, tag, comm, endwall, endcpu, thread = 0):
+def MPI_Irecv(startwall, startcpu, count, type, src, tag, comm, endwall, endcpu, thread = 0):
     return '\n'.join([
-                        'MPI_Recv entering at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(startwall, startcpu, thread),
+                        'MPI_Irecv entering at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(startwall, startcpu, thread),
                         'int count={}'.format(count),
                         'MPI_Datatype datatype={} ({})'.format(type, num_datatype[type]),
                         'int source={}'.format(src),
                         'int tag={}'.format(tag),
                         'MPI_Comm comm={} ({})'.format(comm, num_communicator[comm]),
-                        'MPI_Status status=<IGNORED>',
-                        'MPI_Recv returning at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(endwall, endcpu, thread)
+                        'MPI_Request request=[2]',
+                        'MPI_Irecv returning at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(endwall, endcpu, thread)
+                    ]), endwall + endcpu
+
+def MPI_Wait(startwall, startcpu, count, type, src, tag, comm, endwall, endcpu, thread = 0):
+    size = 1
+
+    if (num_datatype[type] == "MPI_INT"):
+        size = 4
+    elif (num_datatype[type] == "MPI_DOUBLE"):
+        size = 1
+
+    return '\n'.join([
+                        'MPI_Wait entering at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(startwall, startcpu, thread),
+                        'MPI_Request request=[{}]'.format(2),
+                        "MPI_Status status=[{{bytes={}, cancelled={}, source={}, tag={}, error={}}}]".format(count*size, 0, src, tag, 0),
+                        'MPI_Wait returning at walltime {:.9f}, cputime {:.9f} seconds in thread {}.'.format(endwall, endcpu, thread)
                     ]), endwall + endcpu
 
 def MPI_Alltoall(startwall, startcpu, count, type, tag, comm, endwall, endcpu, thread = 0):

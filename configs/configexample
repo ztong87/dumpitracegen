@@ -1,0 +1,14 @@
+# comments on separate lines are allowed, as well as empty lines
+
+#0     255  1048576 MPI_CHAR 11  random       2
+#256   500  12345   MPI_CHAR 100 shift_right  3
+#501   802  32      MPI_CHAR 23  shift_left   5
+#803   900  123     MPI_CHAR 3   permutation
+#901   950  1024    MPI_CHAR 20  random       10
+#951  3000  9876    MPI_INT  5   DNN          4
+#3001 3020  123     MPI_INT  5   ring
+#3021 3400  5555    MPI_INT  5   2DNN
+#3401 4000  872     MPI_INT  5   3DNN
+#4001 4500  1357    MPI_LONG 3   pointtopoint_alltoall
+#4501 5000  987654  MPI_INT  2   MPI_Alltoall
+0   16  100   MPI_INT 1 shift_right  3
