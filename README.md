@@ -36,7 +36,7 @@ Adding new configuration file line parsers:
             0         255     1024    MPI_CHAR       5      rand               1
 
 Adding new traffic patterns:
-    Add the traffic pattern .py file into the traffic directory.
+    Add the traffic pattern.py file into the traffic directory.
         Input:
             Job dictionary from parser
 
