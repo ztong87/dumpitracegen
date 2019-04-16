@@ -1,5 +1,5 @@
 
 # start,end msg_count type iterations pattern pattern_var
-0   63  10000000   MPI_INT 1 shift_right  8 
+0   63  100000000   MPI_INT 1 shift_right  8 
 
 

@@ -1,0 +1,33 @@
+MPI_Init entering at walltime 724.000000000, cputime 1.000000000 seconds in thread 0.
+int argc=0
+string argv[0]=<IGNORED>
+MPI_Init returning at walltime 725.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Comm_rank entering at walltime 726.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Comm comm=2 (MPI_COMM_WORLD)
+int rank=48
+MPI_Comm_rank returning at walltime 727.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Comm_size entering at walltime 728.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Comm comm=2 (MPI_COMM_WORLD)
+int size=256
+MPI_Comm_size returning at walltime 729.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Irecv entering at walltime 731.000000000, cputime 1.000000000 seconds in thread 0.
+int count=100000000
+MPI_Datatype datatype=9 (MPI_INT)
+int source=16
+int tag=0
+MPI_Comm comm=2 (MPI_COMM_WORLD)
+MPI_Request request=[2]
+MPI_Irecv returning at walltime 732.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Send entering at walltime 733.000000000, cputime 1.000000000 seconds in thread 0.
+int count=100000000
+MPI_Datatype datatype=9 (MPI_INT)
+int dest=80
+int tag=0
+MPI_Comm comm=2 (MPI_COMM_WORLD)
+MPI_Send returning at walltime 734.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Wait entering at walltime 735.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Request request=[2]
+MPI_Status status=[{bytes=400000000, cancelled=0, source=80, tag=0, error=0}]
+MPI_Wait returning at walltime 736.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Finalize entering at walltime 737.000000000, cputime 1.000000000 seconds in thread 0.
+MPI_Finalize returning at walltime 738.000000000, cputime 1.000000000 seconds in thread 0.

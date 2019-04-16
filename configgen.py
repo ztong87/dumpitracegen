@@ -33,10 +33,16 @@ if __name__ == '__main__':
     #num_iter = 1
     #size = 100000000
 
-    pattern_var = [230, 513, 790]
-    num_ranks = 1024
+    #pattern_var = [32, 50, 102, 172, 218]
+    pattern_var = [32]
+    num_ranks = 256 
     num_iter = 1
     size = 100000000
+
+    #pattern_var = [230, 513, 790]
+    #num_ranks = 1024
+    #num_iter = 1
+    #size = 100000000
 
 
     for i in pattern_var:
@@ -57,13 +63,15 @@ if __name__ == '__main__':
         #print configline 
 
         # Wr1ite the output flows into file
-        write_file(configline, outfile)
+        #write_file(configline, outfile)
+    
+        # Call dumpitracegen.py to generate the DUMPI traces
+        if (subprocess.call(['./dumpitracegen.py', '--a2d', 'ascii2dumpi', outfile, 'trace/'+outfile]) >= 0): 
+            subprocess.call(['mkdir', '/home/tong/traces/'+outfile])
+            subprocess.call(['mv', '/home/tong/dumpitracegen/trace/*.bin','/home/tong/dumpitracegen/trace/*.meta', '/home/tong/traces/'+outfile])
+        
+        #subprocess.call([args.a2d, filename, '-o', filename + '.bin'])
 
     # The outut of "ls -al" is returned from a seperate subprocess
-    print subprocess.check_output(['ls','-l'])
-    
-    # Call dumpitracegen.py to generate the DUMPI traces 
-    
-
-
+    #print subprocess.check_output(['ls','-l'])
 
