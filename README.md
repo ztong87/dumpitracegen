@@ -19,7 +19,7 @@ positional arguments:
 
 optional arguments:
   -h, --help           show this help message and exit
-  --a2d A2D            specify converter to convert ASCII output to binary
+  --a2d ascii2dunmpi   specify converter to convert ASCII output to binary
   --start START        starting walltime (default 100.0 seconds since epoch)
   --init_dt INIT_DT    time to run init functions (default 1.0 seconds)
   --dt DT              time to run MPI functions (default 1.0 seconds)
@@ -52,3 +52,8 @@ Adding new traffic patterns:
             {source rank : [destination ranks]}
 
     Add the traffic pattern into traffic/__init__.py
+
+To use the script to generate synthetic dumpi traces, you can use the commands below to generate 
+dumpi traces in binary format with the config file shift100-1024ranks-1iter and a filename prefix
+of shift100.
+    ./dumpitracegen.py --a2d ascii2dumpi shift100-1024ranks-1iter trace/shift100
