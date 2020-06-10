@@ -55,5 +55,5 @@ Adding new traffic patterns:
 
 To use the script to generate synthetic dumpi traces, you can use the commands below to generate 
 dumpi traces in binary format with the config file shift100-1024ranks-1iter and a filename prefix
-of shift100.
-    ./dumpitracegen.py --a2d ascii2dumpi shift100-1024ranks-1iter trace/shift100
+of shift100. Make sure "ascii2dumpi" is correctedly installed under the SST-DUMPI library. 
+    "./dumpitracegen.py --a2d ascii2dumpi shift100-1024ranks-1iter trace/shift100"
